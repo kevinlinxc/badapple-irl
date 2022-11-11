@@ -16,11 +16,10 @@ def progress(purpose, currentcount, maxcount):
     sys.stdout.flush()
 
 
-def pHash(cv_image):
+def phash(cv_image):
     """Hash algorithm for an image to detect duplicates"""
     h = cv2.img_hash.pHash(cv_image)  # 8-byte hash
-    pH = int.from_bytes(h.tobytes(), byteorder='big', signed=False)
-    return pH
+    return int.from_bytes(h.tobytes(), byteorder='big', signed=False)
 
 
 def downscale_video(video_path, scale_factor):
@@ -43,7 +42,7 @@ def downscale_video(video_path, scale_factor):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         frame = cv2.resize(frame, (int(width / scale_factor), int(height / scale_factor)))
 
-        frame_hash = pHash(frame)
+        frame_hash = phash(frame)
         # check if hash is in known_hashes
         if frame_hash not in known_hashes:
             out.append(frame)
@@ -84,7 +83,7 @@ def multiprocess_frame_replacement(frame, frames, output_name, width, height, sm
             section = frame[j: j + small_height, i: i + small_width]
 
             if (np.mean(section)) in [0, 255]:
-                # again, if a subsection is all black or white then they are trivial and we shouldn't
+                # again, if a subsection is all black or white then they are trivial, and we shouldn't
                 # waste time looking for the closest frame
                 continue
 
@@ -97,7 +96,7 @@ def multiprocess_frame_replacement(frame, frames, output_name, width, height, sm
     cv2.imwrite(out_path, out_frame)
 
 
-def bad_apple(vid_path: str, frames):
+def bad_apple(vid_path: str, frames, width, height, small_width, small_height):
     # setup function for the multiprocessing
     print(f"total unique downscaled frames: {len(frames)}")
 
@@ -120,6 +119,7 @@ def bad_apple(vid_path: str, frames):
             pool_list = []
         output_name = str(count) + ".png"
         out_path = os.path.join("output", output_name)
+
         # if out_path already exists, skip (for if I stop the script and restart it)
         if os.path.exists(out_path):
             print(f"Skipping {out_path}, exists already", flush=True)
@@ -130,41 +130,45 @@ def bad_apple(vid_path: str, frames):
     cap.release()
 
 
-def compile_video():
+def compile_video(width, height, fps):
     pictures_glob = os.path.join("output", "*.png")
     files = sorted(glob.glob(pictures_glob), key=len)
+
+    print(files)
     # write files to mp4 using opencv
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    out = cv2.VideoWriter("output.mp4", fourcc, fps, (width, height), 0)
-    for file in files:
+    out = cv2.VideoWriter("output.mp4", fourcc, fps, (width, height))
+    for index, file in enumerate(files):
+        if index % 100 == 0 or index == len(files) - 1:
+            progress("compiling video", index, len(files))
         frame = cv2.imread(file)
         out.write(frame)
     out.release()
 
 
 if __name__ == '__main__':
-    vid_path = "badapple.mp4"
+    vid_path_ = "badapple.mp4"
     split = 5  # amount to scale down the video to use as replacements for sections of the original video
     try:
         print(f"loading from {split}split.npy")
-        frames = np.load(f"{split}split.npy")
+        frames_ = np.load(f"{split}split.npy")
     except FileNotFoundError:
         print(f"Downscaling video by {split}")
-        frames = downscale_video(vid_path, split)
-    # bunch of global shit that doesn't work in multiprocessing
-    cap = cv2.VideoCapture(vid_path)
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    cap.release()
-    # get width and height of frames
-    small_height, small_width = frames[0].shape[:2]
-    print(f"width: {width}, height: {height}, small_width: {small_width}, small_height: {small_height}")
+        frames_ = downscale_video(vid_path_, split)
+
+    cap_ = cv2.VideoCapture(vid_path_)
+    width_ = int(cap_.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height_ = int(cap_.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps_ = cap_.get(cv2.CAP_PROP_FPS)
+    cap_.release()
+    # get width and height of small frames
+    small_height_, small_width_ = frames_[0].shape[:2]
+    print(f"width: {width_}, height: {height_}, small_width: {small_width_}, small_height: {small_height_}")
 
     start = timer()
-    bad_apple("badapple.mp4", frames)
+    bad_apple("badapple.mp4", frames_, width_, height_, small_width_, small_height_)
     end = timer()
 
     print(f"Time taken for finding nearest neighbours: {end - start}")
 
-    compile_video()
+    compile_video(width_, height_, fps_)

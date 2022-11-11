@@ -1,7 +1,12 @@
-Originally, I implemented an image hashing algorithm and then made a dict
-with the key being the image and the value being the index of the closest frame.
+# Bad Apple
 
-This cache didn't trigger that often because the frames are pretty different.
+My takes on the quest to find creative ways to play the Bad Apple!! music video.
 
-Instead, I decided to speed up computation with multiprocessing, deleting the cache
-since it might not do well in multiprocessing.
+Currently just one attempt, could be more in the future.
+
+To run:
+
+- Install Python
+- python -m venv venv
+- pip install -r requirements.txt
+- python main.py
