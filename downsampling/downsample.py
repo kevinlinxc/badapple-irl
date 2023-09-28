@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 from pathlib import Path
 
-badapple_path = Path(".").resolve().parent / "badapple.mp4"
+badapple_path = Path(".").resolve().parent / "badapple-small.mp4"
 
 cap = cv2.VideoCapture(str(badapple_path))
 
@@ -18,11 +18,11 @@ n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 print(f"width: {width}, height: {height}, fps: {fps}, n_frames: {n_frames}")
 
 # turn 10x10 pixel sections of the video into all black or all white
-square_side = 20
+square_side = 30
 
 # make a video writer
 fourcc = cv2.VideoWriter_fourcc(*"avc1")
-out = cv2.VideoWriter(f"circle_downsampled{square_side}-{square_side}.mp4", fourcc, fps, (width, height))
+out = cv2.VideoWriter(f"circle_downsampled{square_side}-{square_side}small.mp4", fourcc, fps, (width, height))
 
 ret, frame = cap.read()
 frame_count = 0
@@ -42,7 +42,7 @@ while cap.isOpened():
             section = frame[j: j + square_side, i: i + square_side]
             # if it's highly dark, replace with black circle
             if (np.mean(section)) < 50:
-                cv2.circle(out_frame, (i+square_side//2, j+square_side//2), 5, 0, -1)
+                cv2.circle(out_frame, (i+square_side//2, j+square_side//2), square_side//2, 0, -1)
 
     # write frame
     # display original and new frame with hconcat
