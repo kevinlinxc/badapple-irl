@@ -2,3 +2,6 @@ venv*
 .idea/
 output*
 *split.npy
+
+**.jpg
+**.mp4

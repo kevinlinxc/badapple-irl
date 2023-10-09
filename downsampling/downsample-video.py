@@ -17,7 +17,7 @@ fps = int(cap.get(cv2.CAP_PROP_FPS))
 n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 print(f"width: {width}, height: {height}, fps: {fps}, n_frames: {n_frames}")
 
-# turn 10x10 pixel sections of the video into all black or all white
+# turn nxn pixel sections of the video into all black or all white
 square_side = 30
 
 # make a video writer
@@ -28,6 +28,8 @@ ret, frame = cap.read()
 frame_count = 0
 while cap.isOpened():
     ret, frame = cap.read()
+    if not ret:
+        break
     # convert to grayscale
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     if frame_count % 100 == 0:
