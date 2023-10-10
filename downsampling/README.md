@@ -2,6 +2,7 @@
 
 The idea behind this module is to downsample the Bad Apple!! video into circles, so that I
 can recreate the video in real life using actual (fake) apples. 
+![downsample.png](downsample.png)
 
 ## downsample-video.py
 This script was helping me decide on a downsampling resolution.
@@ -37,3 +38,13 @@ coordinates to try and coordinate moves was probably dumb, and that it would be 
 to just create "diffs", where I have an image that has additions in green and removals in red. This would
 allow me to quickly memorize a few moves and remove them. Assuming that each move instead takes 1 second using this 
 method, this gives 1605 minutes, 26.5 hours, or just over a day. This is totally feasible!
+
+
+## main.ipynb
+This is the file I used to output frames, downsampled frames, and diff frames. It was easier to use a notebook so I could
+repeat imports and reuse objects and code while running stuff separately. The images created are used in workflow.py.
+
+
+## Workflow.py
+Streamlit web-app that lets me go through the frames and see the diffs easily. Streamlit is such a good tool
+for making quick GUIs like this. The picture at the top of the Readme is for this.
