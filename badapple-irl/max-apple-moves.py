@@ -13,8 +13,8 @@ n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 print(f"width: {width}, height: {height}, fps: {fps}, n_frames: {n_frames}")
 
 square_side = 30
-
-
+# frame_start = 365
+# cap.set(cv2.CAP_PROP_POS_FRAMES, frame_start)
 ret, frame = cap.read()
 frame_count = 0
 last_frame_pixels = set()
