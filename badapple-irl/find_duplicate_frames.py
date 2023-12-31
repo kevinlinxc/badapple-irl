@@ -1,3 +1,7 @@
+# after downsampling, there may be some frames that are duplicates of original frames. I want to print out a dictionary
+# of all these frames, so I can later put the original frame in the place of the duplicate frame, and be able to skip
+# arranging the apples for those frames
+
 import cv2
 import numpy as np
 from pathlib import Path
@@ -11,13 +15,17 @@ height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = int(cap.get(cv2.CAP_PROP_FPS))
 n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 print(f"width: {width}, height: {height}, fps: {fps}, n_frames: {n_frames}")
-square_side = 40
+square_side = 30
 
 
 ret, frame = cap.read()
 frame_count = 0
-last_frame_pixels = set()
-total_min_moves = 0
+hashset = set()
+hashmap = {}
+duplicates = {}
+total_duplicates = 0
+flat_duplicates_list = []
+
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -36,16 +44,19 @@ while cap.isOpened():
             section = frame[j: j + square_side, i: i + square_side]
             if (np.mean(section)) < 50:
                 current_frame_pixels.add((i, j))
-    # any time we move an apple from a place that was black on the last frame, and we have a formerly white spot that
-    # needs an apple, we can save on a move by moving the apple from the black spot to the white spot.
-    # this way, we can often halve the number of moves needed. I'm pretty sure it works out mathematically
-    # that the quantity I'm looking for at each step is the maximum(white to black, black to white). The lower one
-    # has all its needs filled by the higher one, and then the higher one has extra moves left over.
-    moves_to_make = max(len(current_frame_pixels.difference(last_frame_pixels)), len(last_frame_pixels.difference(current_frame_pixels)))
-    print(f"Frame {frame_count} to {frame_count+1} had {moves_to_make} moves")
-    total_min_moves += moves_to_make
-    last_frame_pixels = current_frame_pixels
+    hash_of_frame = hash(frozenset(current_frame_pixels))
+    if hash_of_frame in hashset:
+        original_frame = hashmap[hash_of_frame]
+        print(f"Frame {frame_count} is a duplicate of {original_frame}")
+        duplicates[original_frame].append(frame_count)
+        total_duplicates += 1
+        flat_duplicates_list.append(frame_count)
+    else:
+        hashset.add(hash_of_frame)
+        hashmap[hash_of_frame] = frame_count
+        duplicates[frame_count] = []
 
-
-print(f"Total min moves: {total_min_moves}")
-
+print("All duplicates:")
+print(duplicates)
+print(f"Total duplicates: {total_duplicates}")
+print(f"Flat duplicates list: {flat_duplicates_list}")

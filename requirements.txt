@@ -1,2 +1,5 @@
 opencv-contrib-python==4.5.5.62
 numpy~=1.23.4
+jupyter~=1.0.0
+python_tsp
+streamlit
