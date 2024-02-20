@@ -9,7 +9,9 @@ true_frame_path = Path(__file__).resolve().parent / "circle_frames"
 frames_taken = r"K:\badapple-frames"
 all_images_in_frames_taken = os.listdir(frames_taken)
 # filter by JPG only
-all_images_in_frames_taken = [i for i in all_images_in_frames_taken if i.endswith(".JPG")]
+all_images_in_frames_taken = [
+    i for i in all_images_in_frames_taken if i.endswith(".JPG")
+]
 
 permutation = [int(x.strip()) for x in open("permutation.txt", "r").readlines()]
 

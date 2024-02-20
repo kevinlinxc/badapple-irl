@@ -33,7 +33,7 @@ while cap.isOpened():
     current_frame_pixels = set()
     for i in range(0, width - 1, square_side):
         for j in range(0, height - 1, square_side):
-            section = frame[j: j + square_side, i: i + square_side]
+            section = frame[j : j + square_side, i : i + square_side]
             if (np.mean(section)) < 50:
                 current_frame_pixels.add((i, j))
     # any time we move an apple from a place that was black on the last frame, and we have a formerly white spot that
@@ -41,11 +41,13 @@ while cap.isOpened():
     # this way, we can often halve the number of moves needed. I'm pretty sure it works out mathematically
     # that the quantity I'm looking for at each step is the maximum(white to black, black to white). The lower one
     # has all its needs filled by the higher one, and then the higher one has extra moves left over.
-    moves_to_make = max(len(current_frame_pixels.difference(last_frame_pixels)), len(last_frame_pixels.difference(current_frame_pixels)))
+    moves_to_make = max(
+        len(current_frame_pixels.difference(last_frame_pixels)),
+        len(last_frame_pixels.difference(current_frame_pixels)),
+    )
     print(f"Frame {frame_count} to {frame_count+1} had {moves_to_make} moves")
     total_min_moves += moves_to_make
     last_frame_pixels = current_frame_pixels
 
 
 print(f"Total min moves: {total_min_moves}")
-

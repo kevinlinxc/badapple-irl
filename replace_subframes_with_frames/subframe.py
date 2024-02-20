@@ -10,16 +10,19 @@ import os
 
 def progress(purpose, currentcount, maxcount):
     """Generic progress printout"""
-    sys.stdout.write('\r')
+    sys.stdout.write("\r")
     sys.stdout.write(
-        "{}: {} of {}, {:.2f}%".format(purpose, currentcount + 1, maxcount, (currentcount + 1) / maxcount * 100))
+        "{}: {} of {}, {:.2f}%".format(
+            purpose, currentcount + 1, maxcount, (currentcount + 1) / maxcount * 100
+        )
+    )
     sys.stdout.flush()
 
 
 def phash(cv_image):
     """Hash algorithm for an image to detect duplicates"""
     h = cv2.img_hash.pHash(cv_image)  # 8-byte hash
-    return int.from_bytes(h.tobytes(), byteorder='big', signed=False)
+    return int.from_bytes(h.tobytes(), byteorder="big", signed=False)
 
 
 def downscale_video(video_path, scale_factor):
@@ -40,7 +43,9 @@ def downscale_video(video_path, scale_factor):
             break
         # convert to grayscale and downscale by scale_width
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        frame = cv2.resize(frame, (int(width / scale_factor), int(height / scale_factor)))
+        frame = cv2.resize(
+            frame, (int(width / scale_factor), int(height / scale_factor))
+        )
 
         frame_hash = phash(frame)
         # check if hash is in known_hashes
@@ -63,7 +68,9 @@ def get_closest_frame(frame, frames):
     return min(frames, key=lambda x: cv2.norm(frame, x, cv2.NORM_L2))
 
 
-def multiprocess_frame_replacement(frame, frames, output_name, width, height, small_width, small_height):
+def multiprocess_frame_replacement(
+    frame, frames, output_name, width, height, small_width, small_height
+):
     """
     Bite-sized task to replace split x split sections in the video with the closest frames from frames.
     All cores are taking tasks from the list and running this function.
@@ -80,7 +87,7 @@ def multiprocess_frame_replacement(frame, frames, output_name, width, height, sm
     for i in range(0, width - 1, small_width):
         for j in range(0, height - 1, small_height):
             # get section of frame
-            section = frame[j: j + small_height, i: i + small_width]
+            section = frame[j : j + small_height, i : i + small_width]
 
             if (np.mean(section)) in [0, 255]:
                 # again, if a subsection is all black or white then they are trivial, and we shouldn't
@@ -91,7 +98,7 @@ def multiprocess_frame_replacement(frame, frames, output_name, width, height, sm
             closest_frame = get_closest_frame(section, frames)
 
             # replace section with the closest frame
-            out_frame[j: j + small_height, i: i + small_width] = closest_frame
+            out_frame[j : j + small_height, i : i + small_width] = closest_frame
     print(f"writing {output_name}", flush=True)
     cv2.imwrite(out_path, out_frame)
 
@@ -125,7 +132,9 @@ def bad_apple(vid_path: str, frames, width, height, small_width, small_height):
             print(f"Skipping {out_path}, exists already", flush=True)
         else:
             print(f"Adding {output_name} to work pool", flush=True)
-            pool_list.append((frame, frames, output_name, width, height, small_width, small_height))
+            pool_list.append(
+                (frame, frames, output_name, width, height, small_width, small_height)
+            )
         count += 1
     cap.release()
 
@@ -146,7 +155,7 @@ def compile_video(width, height, fps):
     out.release()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     vid_path_ = "../badapple.mp4"
     split = 5  # amount to scale down the video to use as replacements for sections of the original video
     try:
@@ -163,7 +172,9 @@ if __name__ == '__main__':
     cap_.release()
     # get width and height of small frames
     small_height_, small_width_ = frames_[0].shape[:2]
-    print(f"width: {width_}, height: {height_}, small_width: {small_width_}, small_height: {small_height_}")
+    print(
+        f"width: {width_}, height: {height_}, small_width: {small_width_}, small_height: {small_height_}"
+    )
 
     start = timer()
     bad_apple("../badapple.mp4", frames_, width_, height_, small_width_, small_height_)

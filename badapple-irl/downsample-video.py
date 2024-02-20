@@ -24,7 +24,12 @@ square_side = 30
 
 # make a video writer
 fourcc = cv2.VideoWriter_fourcc(*"avc1")
-out = cv2.VideoWriter(f"circle_downsampled{square_side}-{square_side}small.mp4", fourcc, fps, (width, height))
+out = cv2.VideoWriter(
+    f"circle_downsampled{square_side}-{square_side}small.mp4",
+    fourcc,
+    fps,
+    (width, height),
+)
 
 ret, frame = cap.read()
 frame_count = 0
@@ -43,10 +48,16 @@ while cap.isOpened():
     for i in range(0, width - 1, square_side):
         for j in range(0, height - 1, square_side):
             # get section of frame
-            section = frame[j: j + square_side, i: i + square_side]
+            section = frame[j : j + square_side, i : i + square_side]
             # if it's highly dark, replace with black circle
             if (np.mean(section)) < 50:
-                cv2.circle(out_frame, (i+square_side//2, j+square_side//2), square_side//2, 0, -1)
+                cv2.circle(
+                    out_frame,
+                    (i + square_side // 2, j + square_side // 2),
+                    square_side // 2,
+                    0,
+                    -1,
+                )
 
     # write frame
     # display original and new frame with hconcat
@@ -57,4 +68,3 @@ while cap.isOpened():
 
 out.release()
 cap.release()
-

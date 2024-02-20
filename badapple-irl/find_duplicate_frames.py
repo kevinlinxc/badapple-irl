@@ -41,7 +41,7 @@ while cap.isOpened():
     current_frame_pixels = set()
     for i in range(0, width - 1, square_side):
         for j in range(0, height - 1, square_side):
-            section = frame[j: j + square_side, i: i + square_side]
+            section = frame[j : j + square_side, i : i + square_side]
             if (np.mean(section)) < 50:
                 current_frame_pixels.add((i, j))
     hash_of_frame = hash(frozenset(current_frame_pixels))

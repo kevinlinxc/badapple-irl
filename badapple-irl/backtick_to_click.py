@@ -3,11 +3,13 @@
 import keyboard
 import pyautogui
 
+
 def click_mouse():
     pyautogui.click()
 
+
 # Define the hotkey (backtick in this case) and the function to call
-keyboard.add_hotkey('`', click_mouse)
+keyboard.add_hotkey("`", click_mouse)
 
 # Keep the program running
-keyboard.wait('esc')
+keyboard.wait("esc")

@@ -7,8 +7,10 @@ import numpy as np
 import cv2
 import numpy as np
 from pathlib import Path
+
 # add current directory to path
 import sys
+
 sys.path.append("~/src/badapple/badapple-irl/")
 from python_tsp2.exact import solve_tsp_dynamic_programming
 import threading
@@ -48,11 +50,13 @@ def main():
         current_frame_pixels = set()
         for i in range(0, width - 1, square_side):
             for j in range(0, height - 1, square_side):
-                section = frame[j: j + square_side, i: i + square_side]
+                section = frame[j : j + square_side, i : i + square_side]
                 if (np.mean(section)) < 50:
                     current_frame_pixels.add((i, j))
         frame_points.append(current_frame_pixels)
-        original_frame_id_map[len(frame_points) - 1] = frame_start + (frame_count-1) * 2  # trust
+        original_frame_id_map[len(frame_points) - 1] = (
+            frame_start + (frame_count - 1) * 2
+        )  # trust
         # skip a frame because I don't want to do every frame
         ret, frame = cap.read()
     num_frames = len(frame_points)
@@ -125,15 +129,38 @@ def main():
                     text_color = (0, 0, 0)
                     circle_colour = None
                 if circle_colour is not None:
-                    cv2.circle(out_frame, (i + square_side // 2, j + square_side // 2), square_side // 2, circle_colour, -1)
-                cv2.putText(out_frame, f"{j // square_side + 1}", (i + square_side // 3 - 1, j + 22),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.3, text_color, 1, cv2.LINE_AA)
-                cv2.putText(out_frame, f"{i // square_side + 1}", (i + square_side // 3 - 1, j + 12),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.3, text_color, 1, cv2.LINE_AA)
+                    cv2.circle(
+                        out_frame,
+                        (i + square_side // 2, j + square_side // 2),
+                        square_side // 2,
+                        circle_colour,
+                        -1,
+                    )
+                cv2.putText(
+                    out_frame,
+                    f"{j // square_side + 1}",
+                    (i + square_side // 3 - 1, j + 22),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.3,
+                    text_color,
+                    1,
+                    cv2.LINE_AA,
+                )
+                cv2.putText(
+                    out_frame,
+                    f"{i // square_side + 1}",
+                    (i + square_side // 3 - 1, j + 12),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.3,
+                    text_color,
+                    1,
+                    cv2.LINE_AA,
+                )
 
         cv2.imwrite(f"diff_frames_opt_1000/{index}.png", out_frame)
 
         last_frame_pixels = current_frame_pixels
+
 
 threading.stack_size(67108864)
 sys.setrecursionlimit(10000)
