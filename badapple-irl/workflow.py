@@ -18,7 +18,6 @@ hide_streamlit_style = """
 
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-# original_expander = st.expander("Original frame")
 frame_number = st.number_input(
     "Enter frame number", min_value=0, max_value=3104, value=0, step=1
 )
@@ -32,15 +31,8 @@ row1 = st.empty()
 row2_text = st.empty()
 row2 = st.empty()
 
-# let user manually enter image number, or click next and back
-
-
-# display images from real_frames, circle_frames and diff_frames based on image number
+# display images from circle_frames and diff_frames based on image number
 base = Path("badapple-irl").resolve()
-# real_path = base / "real_frames" / f"{frame_number}.jpg"
-# if os.path.exists(real_path):
-#     img = Image.open(real_path)
-#     original_expander.image(img)
 
 circle_path = base / "circle_frames_opt" / f"{frame_number}.png"
 if os.path.exists(circle_path):
@@ -51,6 +43,5 @@ if os.path.exists(circle_path):
 
 diff_path = base / "diff_frames_opt" / f"{frame_number}.png"
 if os.path.exists(diff_path):
-    # row1_text.write(f"Frames {frame_number-1} to {frame_number} diff")
     img = Image.open(diff_path)
     row1.image(img)

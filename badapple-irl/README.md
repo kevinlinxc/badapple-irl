@@ -28,9 +28,8 @@ timespan. To do this, I needed to calculate how many times I would have to move 
 To calculate the maximum number of moves, I tracked how many pixels changed from white to black or black to white
 between frames. This was basically just an exclusive or operation between the two frames' sets.
 
-Using this method, I found that I would need at most 147688 moves. Assuming each move would take 5 seconds,
-this equated to 12307 minutes, or 205 hours, or 8.5 days. This was a bit too long for me, so I decided to see if
-I could optimize the moves early.
+Using this method, I found that I would need at most 147688 moves. Assuming each move would take 1 second,
+this equated to 2461 minutes, or 41 hours. This was a bit too long for me, so I wanted to check something else.
 
 
 ## min-apple-moves.py
@@ -41,13 +40,18 @@ down to 96351, which was a decent size decrease. At this point, I realized that 
 coordinates to try and coordinate moves was probably dumb, and that it would be much faster
 to just create "diffs", where I have an image that has additions in green and removals in red. This would
 allow me to quickly memorize a few moves and remove them. Assuming that each move instead takes 1 second using this 
-method, this gives 1605 minutes, 26.5 hours, or just over a day. This is totally feasible! (narrator: it was not
+method, this gives 1605 minutes, 26.5 hours, or just over a day (or three days for a sane person). This is totally feasible! 
+
+(narrator: it was not
 totally feasible. It took over 50 days. 1 second per apple was way too ambitious, removals may be that fast but additions
-take a long time and you have to move around the canvas to place apples too.)
+take a long time, and you have to move around the canvas to place apples too. This whole project was just a chain of
+underestimations followed by sunken cost fallacies, and it was so worth it)
 
 ## main.ipynb
-This is the file I used to output frames, downsampled frames, and diff frames. It was easier to use a notebook so I could
+This is the file I used to output frames, downsampled frames, and importantly, diff frames. It was easier to use a notebook so I could
 repeat imports and reuse objects and code while running stuff separately. The images created are used in workflow.py.
+At this point, I wanted to use the travelling salesman problem to optimize the order of apples moved in a single frame,
+but this was too much effort and the result wasn't very good (but TSP makes a comeback later).
 
 ## workflow.py
 Streamlit web-app that lets me go through the frames and see the diffs easily on the TV while
@@ -63,7 +67,7 @@ scanning all the frames with my eyes.
 After doing 364 frames, I decided it was way too much work to do all 6000+ frames and I cut the framerate a bit. This 
 script let me test out which framerate was reasonable and still looked good. I decided on 15 fps I believe.
 
-## main.ipynb + travelling-salesman.ipynb
+## travelling-salesman.ipynb
 At some point I decided to try and optimize the number of apple moves I would need to do by using the travelling salesman
 problem (TSP) solutions to find the optimal frame order. These notebooks have that process, and they are really messy,
 so I'm sorry if you wanted to read them. This created an optimized frame order which I used for the last 3104 frames.
@@ -81,3 +85,8 @@ duplicate frames and find missing frames that I had to retake.
 These were for automating some of the tedious parts of working in lightroom while postprocessing the frames. 
 They basically let me place the mouse over a part of the pictures, and then it would go through all of them and set
 the white balance using that part of the picture.
+
+## bad-apple-videomaker.py
+File that creates a video out of all the post-processed frames. Makes a 30 fps video
+for the first part (before TSP) and 15fps for the TSP part. Also makes a video with the file names, 
+because I thought it would be a cool aesthetic. 
