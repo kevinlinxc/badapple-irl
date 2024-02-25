@@ -34,14 +34,14 @@ row2 = st.empty()
 # display images from circle_frames and diff_frames based on image number
 base = Path("badapple-irl").resolve()
 
-circle_path = base / "circle_frames_opt" / f"{frame_number}.png"
+circle_path = base / "circle_frames" / f"{frame_number}.jpg"
 if os.path.exists(circle_path):
     row2_text.write(f"Frame {frame_number}")
     img = Image.open(circle_path)
     row2.image(img)
 
 
-diff_path = base / "diff_frames_opt" / f"{frame_number}.png"
+diff_path = base / "diff_frames" / f"{frame_number}.jpg"
 if os.path.exists(diff_path):
     img = Image.open(diff_path)
     row1.image(img)

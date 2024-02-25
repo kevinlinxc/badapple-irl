@@ -9,12 +9,13 @@ cap = cv2.VideoCapture(str(badapple_path))
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = int(cap.get(cv2.CAP_PROP_FPS))
-n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-print(f"width: {width}, height: {height}, fps: {fps}, n_frames: {n_frames}")
 
 square_side = 30
-# frame_start = 365
-# cap.set(cv2.CAP_PROP_POS_FRAMES, frame_start)
+frame_start = 365
+n_frames = int((cap.get(cv2.CAP_PROP_FRAME_COUNT)-frame_start)/2)
+print(f"width: {width}, height: {height}, fps: {fps}, n_frames: {n_frames}")
+
+cap.set(cv2.CAP_PROP_POS_FRAMES, frame_start)
 ret, frame = cap.read()
 frame_count = 0
 last_frame_pixels = set()
@@ -22,11 +23,12 @@ total_max_moves = 0
 
 while cap.isOpened():
     ret, frame = cap.read()
+    ret, frame = cap.read() # skip a frame because 15 fps
     if not ret:
         break
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    if frame_count % 100 == 0:
-        print(f"frame {frame_count}/{n_frames}")
+    # if frame_count % 100 == 0:
+    #     print(f"frame {frame_count}/{n_frames}")
     frame_count += 1
 
     current_frame_pixels = set()
@@ -41,9 +43,8 @@ while cap.isOpened():
     # but for this script I just want to know an upper bound.
     moves = current_frame_pixels ^ last_frame_pixels
     print(f"Frame {frame_count} to {frame_count+1} had {len(moves)} moves")
-    print(f"White to black: {current_frame_pixels.difference(last_frame_pixels)}")
-    print(f"Black to white: {last_frame_pixels.difference(current_frame_pixels)}")
-    print(f"")
+    # print(f"White to black: {current_frame_pixels.difference(last_frame_pixels)}")
+    # print(f"Black to white: {last_frame_pixels.difference(current_frame_pixels)}")
     total_max_moves += len(moves)
     last_frame_pixels = current_frame_pixels
 
