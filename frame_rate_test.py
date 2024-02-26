@@ -3,7 +3,7 @@ import cv2
 from pathlib import Path
 import os
 
-circle_frames_path = Path(".").resolve() / "circle_frames"
+circle_frames_path = Path("badapple-irl").resolve() / "circle_frames"
 
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 # get all the file names
@@ -15,7 +15,7 @@ frame = cv2.imread(str(circle_frames_path / files[0]))
 height, width, layers = frame.shape
 print(f"width: {width}, height: {height}")
 # get fps of bad_apple_small.mp4
-vid_path = Path(".").resolve().parent / "badapple-small.mp4"
+vid_path = Path("badapple-irl").resolve().parent / "badapple-small.mp4"
 cap = cv2.VideoCapture(str(vid_path))
 fps = int(cap.get(cv2.CAP_PROP_FPS))
 print(f"fps: {fps}")

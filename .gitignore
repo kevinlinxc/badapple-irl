@@ -1,10 +1,5 @@
-venv*
-.idea/
-output*
-*split.npy
-
-**.jpg
-**.mp4
+python_tsp2
 **.png
-
-**.DS_Store
+**.mp4
+**.jpg
+**venv**

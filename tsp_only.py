@@ -19,7 +19,7 @@ import threading
 # setup
 def main():
 
-    badapple_path = Path(".").resolve().parent / "badapple-small.mp4"
+    badapple_path = Path("badapple-irl").resolve().parent / "badapple-small.mp4"
     square_side = 30
     # skip to frame 364 because I already did every frame before that
     frame_start = 365
