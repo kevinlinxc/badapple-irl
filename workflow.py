@@ -1,3 +1,4 @@
+# streamlit run workflow.py
 import streamlit as st
 import os
 from pathlib import Path
@@ -32,7 +33,7 @@ row2_text = st.empty()
 row2 = st.empty()
 
 # display images from circle_frames and diff_frames based on image number
-base = Path("badapple-irl").resolve()
+base = Path("").resolve()
 
 circle_path = base / "circle_frames" / f"{frame_number}.jpg"
 if os.path.exists(circle_path):

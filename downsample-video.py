@@ -8,7 +8,7 @@ import numpy as np
 from pathlib import Path
 
 # original video
-badapple_path = Path("badapple-irl").resolve().parent / "badapple-small.mp4"
+badapple_path = Path(".") / "badapple-small.mp4"
 
 cap = cv2.VideoCapture(str(badapple_path))
 

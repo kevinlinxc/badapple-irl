@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from pathlib import Path
 
-badapple_path = Path("badapple-irl").resolve().parent / "badapple-small.mp4"
+badapple_path = Path(".").resolve() / "badapple-small.mp4"
 
 cap = cv2.VideoCapture(str(badapple_path))
 

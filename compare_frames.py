@@ -14,7 +14,7 @@ rotation_number = st.number_input(
     "Rotation", min_value=0, max_value=270, value=0, step=90
 )
 col1, col2 = st.columns(2)
-true_frame_path = "badapple-irl/circle_frames"
+true_frame_path = "circle_frames"
 frames_taken = r"K:\badapple-frames"
 all_images_in_frames_taken = os.listdir(frames_taken)
 # filter by JPG only
@@ -23,7 +23,7 @@ all_images_in_frames_taken = [
 ]
 
 permutation = [
-    int(x.strip()) for x in open("badapple-irl/permutation.txt", "r").readlines()
+    int(x.strip()) for x in open("permutation.txt", "r").readlines()
 ]
 first_placeholder = col1.empty()
 second_placeholder = col2.empty()

@@ -3,7 +3,7 @@ import cv2
 from pathlib import Path
 import os
 
-circle_frames_path = Path("badapple-irl").resolve() / "circle_frames"
+circle_frames_path = Path(".").resolve() / "circle_frames"
 
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 # get all the file names

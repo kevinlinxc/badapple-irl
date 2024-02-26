@@ -1,4 +1,6 @@
 # script to automatically use shortcuts on lightroom to set the white balance using the same spot in every photo
+# preferred to doing white balance programatically because cropping and lighting is easier in lightroom,
+# and you have to do white balance before doing cropping
 import keyboard
 import pyautogui
 import time

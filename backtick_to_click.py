@@ -1,4 +1,4 @@
-# make it so pressing the backtick triggers a click so I don't have to use the mouse for certain tedious tasks in
+# make it so pressing the backtick triggers a click, so I don't have to use the mouse for certain tedious tasks in
 # lightroom
 import keyboard
 import pyautogui
