@@ -1,7 +1,7 @@
-# Downsampling
+# Badapple-irl
 
-The idea behind this module is to downsample the Bad Apple!! video into circles, so that I
-can recreate the video in real life using actual (fake) apples. 
+The idea behind this project was to downsample the Bad Apple!! video into circles, so that I
+could recreate the video in real life using actual (fake) apples. 
 ![downsample.png](downsample.png)
 
 Below is a description of all the Python code that I wrote for this project, in the order that I wrote them in.
