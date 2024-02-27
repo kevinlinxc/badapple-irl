@@ -1,5 +1,10 @@
 # Badapple-irl
 
+Final video:
+[![youtube video thumbnail](https://img.youtube.com/vi/lT-fdnIK0k0/0.jpg)](https://www.youtube.com/watch?v=lT-fdnIK0k0)
+
+## Introduction
+
 The idea behind this project was to downsample the Bad Apple!! video into circles, so that I
 could recreate the video in real life using actual (fake) apples. 
 ![downsample.png](downsample.png)
